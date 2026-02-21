@@ -1,24 +1,27 @@
 <app-header></app-header>
 <main>
     <ul id="users">
-        <li>
-            <app-user [id] = "users()[0].id" [avatar]="users()[0].avatar" [name]="users()[0].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
-        <li>
-            <app-user [id] = "users()[1].id" [avatar]="users()[1].avatar" [name]="users()[1].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
-        <li>
-            <app-user [id] = "users()[2].id" [avatar]="users()[2].avatar" [name]="users()[2].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
-        <li>
-            <app-user [id] = "users()[3].id" [avatar]="users()[3].avatar" [name]="users()[3].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
-        <li>
-            <app-user [id] = "users()[4].id" [avatar]="users()[4].avatar" [name]="users()[4].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
-        <li>
-            <app-user [id] = "users()[5].id" [avatar]="users()[5].avatar" [name]="users()[5].name" (select)="onSelectUserApp($event)"></app-user>
-        </li>
+        @for (user of users(); track user.id)
+        {
+            <li>
+                <app-user [user]="user" [isSelected]="selectedUser?.id === user.id" (select)="onSelectUserApp($event)"></app-user>
+            </li>
+        }       
+
+        <!-- Older Version -->
+        <!-- <li *ngFor = "let user of users()">
+            <app-user [user]="user" (select)="onSelectUserApp($event)"></app-user>
+        </li> -->
     </ul>
-    <app-tasks [name]="selectedUserName"></app-tasks>
+    @if (selectedUser)
+    {
+        <app-tasks [name]="selectedUser.name" [selectedUserID]="selectedUser.id"></app-tasks>
+    }
+    @else
+    {
+        <p>Please select a user to see their tasks.</p>
+    }    
+    <!-- Older Version -->
+     <!-- <app-tasks *ngIf="selectedUserID; else fallback" [name]="selectedUser!.name"></app-tasks>
+     <ng-template #fallback><p>Please select a user to see their tasks.</p></ng-template> -->
 </main> 
